@@ -16,11 +16,36 @@ sudo pip install --upgrade google-api-python-client
 
 You can change the badge or turn off sound, for more info see [script arguments](#script-arguments)
 
+## Installation
+
+```sh
+cd ~/.config/polybar
+curl -LO https://github.com/vyachkonovalov/polybar-gmail/archive/master.tar.gz
+tar zxf master.tar.gz && rm master.tar.gz
+mv polybar-gmail-master gmail
+```
+
+and obtain/refresh credentials
+
+```sh
+~/.config/polybar/gmail/auth.py
+```
+
+### Module
+
+```ini
+[module/gmail]
+type = custom/script
+exec = ~/.config/polybar/gmail/launch.py
+tail = true
+click-left = xdg-open https://mail.google.com
+```
+
 ## Script arguments
 
-`-p` or `--prefix` - to change email badge
+`-p` or `--prefix` - to change email badge, default: 
 
-`-c` or `--color` - to change new email badge color
+`-c` or `--color` - to change new email badge color, default: #e06c75
 
 `-ns` or `--nosound` - turn off new email sound
 
