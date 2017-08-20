@@ -2,7 +2,7 @@
 
 A [Polybar](https://github.com/jaagr/polybar) module to show unread messages from Gmail.
 
-![screenshot](https://github.com/vyachkonovalov/polybar-gmail/raw/master/preview.png)
+![preview](https://github.com/vyachkonovalov/polybar-gmail/raw/master/preview.png)
 
 ## Dependencies
 

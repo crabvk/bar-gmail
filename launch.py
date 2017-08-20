@@ -7,6 +7,7 @@ import time
 import argparse
 from apiclient import discovery, errors
 from oauth2client import client, file
+from httplib2 import ServerNotFoundError
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-p', '--prefix', default='\uf0e0')
@@ -41,7 +42,7 @@ while True:
         else:
             print(error_prefix + 'credentials not found', flush=True)
             time.sleep(2)
-    except errors.HttpError as error:
+    except (errors.HttpError, ServerNotFoundError) as error:
         print(error_prefix + str(error), flush=True)
         time.sleep(5)
     except client.AccessTokenRefreshError:
