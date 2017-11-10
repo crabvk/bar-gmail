@@ -24,8 +24,15 @@ count_was = 0
 
 def update_count(count_was):
     gmail = discovery.build('gmail', 'v1', credentials=file.Storage(CREDENTIALS_PATH).get())
-    list = gmail.users().messages().list(userId='me', q='in:inbox is:unread').execute()
-    count = list['resultSizeEstimate']
+    label_ids = ['INBOX', 'UNREAD']
+    user_id = 'me'
+    list = gmail.users().messages().list(userId=user_id, labelIds=label_ids).execute()
+    if 'resultSizeEstimate' in list:
+        count = list['resultSizeEstimate']
+        while 'nextPageToken' in list:
+            page_token = list['nextPageToken']
+            list = gmail.users().messages().list(userId=user_id, labelIds=label_ids, pageToken=page_token).execute()
+            count += list['resultSizeEstimate']
     if count > 0:
         print(unread_prefix + str(count), flush=True)
     else:
