@@ -24,9 +24,8 @@ count_was = 0
 
 def update_count(count_was):
     gmail = discovery.build('gmail', 'v1', credentials=file.Storage(CREDENTIALS_PATH).get())
-    label = 'INBOX' # Note: default labels are uppercase, such as the inbox or spam label
-    user_id = 'me'
-    count = gmail.users().labels().get(userId=user_id, id=label).execute()['threadsUnread']
+    labels = gmail.users().labels().get(userId='me', id='INBOX').execute()
+    count = labels['messagesUnread']
     if count > 0:
         print(unread_prefix + str(count), flush=True)
     else:
