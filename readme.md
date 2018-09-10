@@ -7,7 +7,7 @@ A [Polybar](https://github.com/jaagr/polybar) module to show unread messages fro
 ## Dependencies
 
 ```sh
-sudo pip install --upgrade google-api-python-client
+sudo pip install --upgrade oauth2client google-api-python-client
 ```
 
 **Font Awesome** - for email badge

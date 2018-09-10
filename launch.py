@@ -22,17 +22,25 @@ unread_prefix = '%{F' + args.color + '}' + args.prefix + ' %{F-}'
 error_prefix = '%{F' + args.color + '}\uf06a %{F-}'
 count_was = 0
 
+def print_count(count, is_odd=False):
+    tilde = '~' if is_odd else ''
+    output = ''
+    if count > 0:
+        output = unread_prefix + tilde + str(count)
+    else:
+        output = (args.prefix + ' ' + tilde).strip()
+    print(output, flush=True)
+
 def update_count(count_was):
     gmail = discovery.build('gmail', 'v1', credentials=file.Storage(CREDENTIALS_PATH).get())
     labels = gmail.users().labels().get(userId='me', id='INBOX').execute()
     count = labels['messagesUnread']
-    if count > 0:
-        print(unread_prefix + str(count), flush=True)
-    else:
-        print(args.prefix, flush=True)
+    print_count(count)
     if not args.nosound and count_was < count and count > 0:
         subprocess.run(['canberra-gtk-play', '-i', 'message'])
     return count
+
+print_count(0, True)
 
 while True:
     try:
@@ -43,7 +51,7 @@ while True:
             print(error_prefix + 'credentials not found', flush=True)
             time.sleep(2)
     except (errors.HttpError, ServerNotFoundError, OSError) as error:
-        print(error_prefix + str(error), flush=True)
+        print_count(count_was, True)
         time.sleep(5)
     except client.AccessTokenRefreshError:
         print(error_prefix + 'revoked/expired credentials', flush=True)
