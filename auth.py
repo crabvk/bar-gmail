@@ -15,11 +15,16 @@ storage = file.Storage(CREDENTIALS_PATH)
 
 if pathlib.Path(CREDENTIALS_PATH).is_file():
     credentials = storage.get()
-    credentials.refresh(httplib2.Http())
-    print('Credentials successfully refreshed')
+    if isinstance(credentials, client.OAuth2Credentials):
+        try:
+            credentials.refresh(httplib2.Http())
+            print('Credentials successfully refreshed')
+        except client.HttpAccessTokenRefreshError:
+            print('Expired or revoked credentials. Try to remove credentials.json')
+    else:
+        print('credentials.json has wrong format, try to remove it')
 else:
-    flow = client.flow_from_clientsecrets(CLIENT_SECRETS_PATH, scope=SCOPE,
-                                                               redirect_uri=REDIRECT_URI)
+    flow = client.flow_from_clientsecrets(CLIENT_SECRETS_PATH, scope=SCOPE, redirect_uri=REDIRECT_URI)
     auth_uri = flow.step1_get_authorize_url()
     webbrowser.open(auth_uri)
     auth_code = input('Enter the auth code: ')
