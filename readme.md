@@ -43,14 +43,27 @@ click-left = xdg-open https://mail.google.com
 
 ## Script arguments
 
-`-p` or `--prefix` - to change email badge, default: 
+`-l` or `--label` - set user's mailbox [label](https://developers.google.com/gmail/api/v1/reference/users/labels/list), default: INBOX
 
-`-c` or `--color` - to change new email badge color, default: #e06c75
+`-p` or `--prefix` - set email badge, default: 
+
+`-c` or `--color` - set new email badge color, default: #e06c75
 
 `-ns` or `--nosound` - turn off new email sound
 
 ### Example
 
 ```sh
-launch.py --prefix '📧' --color '#be5046' --nosound
+./launch.py --label 'CATEGORY_PERSONAL' --prefix '📧' --color '#be5046' --nosound
+```
+
+## How to get full list of the mailbox labels
+
+```python
+from apiclient import discovery
+from oauth2client import file
+
+CREDENTIALS_PATH = '/path/to/credentials.json'
+gmail = discovery.build('gmail', 'v1', credentials=file.Storage(CREDENTIALS_PATH).get())
+gmail.users().labels().list(userId='me').execute()
 ```

@@ -10,6 +10,7 @@ from oauth2client import client, file
 from httplib2 import ServerNotFoundError
 
 parser = argparse.ArgumentParser()
+parser.add_argument('-l', '--label', default='INBOX')
 parser.add_argument('-p', '--prefix', default='\uf0e0')
 parser.add_argument('-c', '--color', default='#e06c75')
 parser.add_argument('-ns', '--nosound', action='store_true')
@@ -33,7 +34,7 @@ def print_count(count, is_odd=False):
 
 def update_count(count_was):
     gmail = discovery.build('gmail', 'v1', credentials=file.Storage(CREDENTIALS_PATH).get())
-    labels = gmail.users().labels().get(userId='me', id='INBOX').execute()
+    labels = gmail.users().labels().get(userId='me', id=args.label).execute()
     count = labels['messagesUnread']
     print_count(count)
     if not args.nosound and count_was < count and count > 0:
@@ -50,7 +51,13 @@ while True:
         else:
             print(error_prefix + 'credentials not found', flush=True)
             time.sleep(2)
-    except (errors.HttpError, ServerNotFoundError, OSError) as error:
+    except errors.HttpError as error:
+        if error.resp.status == 404:
+            print(error_prefix + f'"{args.label}" label not found', flush=True)
+        else:
+            print_count(count_was, True)
+        time.sleep(5)
+    except (ServerNotFoundError, OSError):
         print_count(count_was, True)
         time.sleep(5)
     except client.AccessTokenRefreshError:
