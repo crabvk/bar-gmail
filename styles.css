@@ -1,0 +1,81 @@
+header, main, nav {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+header {
+  font-size: 20px;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  margin-bottom: 1rem;
+}
+
+header img {
+  width: 4rem;
+  min-width: 4rem;
+  margin-right: 0.5rem;
+}
+
+nav {
+  text-align: center;
+}
+
+nav a {
+  white-space: nowrap;
+}
+
+nav a:not(:last-child) {
+  margin-right: 1rem;
+}
+
+nav, main .notes {
+  margin-bottom: 2rem;
+}
+
+main .notes {
+  max-width: 50rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+main .description {
+  color: rgba(34,110,147,1);
+  max-width: 50rem;
+  text-align: center;
+  margin: 0 auto;
+  margin-bottom: 2rem;
+  font-size: 40px;
+  font-weight: 300;
+}
+
+main .description a:visited {
+  text-decoration: none;
+  color: rgba(34,110,147,1);
+}
+
+main .privacy h1,
+main .privacy h2,
+main .privacy h3 {
+  font-weight: 400;
+}
+
+main .privacy {
+  color: #424242;
+}
+
+@media (max-width: 479px) {
+  header, main, nav {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+
+  main .description {
+    font-size: 30px;
+  }
+
+  header img {
+    margin-right: 0.2rem;
+  }
+}

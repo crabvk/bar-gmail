@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polybar Gmail</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <header>
+    <img src="/logo.svg">
+    Polybar Gmail
+  </header>
+  <nav>
+    <a href="https://github.com/vyachkonovalov/polybar-gmail/" target="_blank">View on GitHub</a>
+    <a href="https://raw.githubusercontent.com/vyachkonovalov/polybar-gmail/master/LICENSE" target="_blank">License</a>
+  </nav>
+  <main>
+    <div class="description">
+      <a href="https://github.com/polybar/polybar" target="_blank">Polybar</a>
+      module that shows unread message count from Gmail
+    </div>
+    <div class="notes">
+      <p>This module requests user data to show you unread message count from your Gmail account.</p>
+      <p>You'll see a badge in your Polybar bar with a number of unread messages.</p>
+    </div>
+    <div class="privacy">
+      <h1>Privacy Policy</h1>
+
+      <h2>Introduction</h2>
+
+      <p>
+        This privacy policy will help you understand what information we collect with Polybar Gmail,
+        how Polybar Gmail uses it, and what information you share.
+        "We" here means I, the developer of Polybar Gmail, and all its
+        <a href="https://github.com/vyachkonovalov/polybar-gmail/graphs/contributors" target="_blank">collaborators</a>
+      </p>
+
+      <h2>Information we receive and collect</h2>
+
+      <h3>Google Customer Data</h3>
+
+      <p>
+        As result of authenticating a Google Account with Polybar Gmail,
+        we store and utilize Google Application Credentials and expiration values.
+        We use this credentials to retrieve email data via the Google Gmail API.
+      </p>
+
+      <h3>Google OAuth Scopes</h3>
+
+      <p>
+        When authenticating a Google Account with Polybar Gmail,
+        we request the use of https://www.googleapis.com/auth/gmail.labels OAuth scope.
+        This scope is needed in order to read the count of unread Inbox messages on your Gmail account.
+        The reading of this information is done via
+        <a href="https://github.com/googleapis/google-api-python-client" target="_blank">the official Python client
+          library</a>
+      </p>
+
+      <h2>How we use your information</h2>
+
+      <p>
+        We get the count of unread messages in your Inbox,
+        which intended to display in a <a href="https://github.com/polybar/polybar" target="_blank">Polybar</a> bar.
+        Eventually, this count is stored on your computer in temporary memory (RAM) for about 10 seconds,
+        except for the case when internet connection is lost then this time can be exceeded.
+      </p>
+
+      <h2>Sharing and Disclosure</h2>
+
+      <p>
+        We don't share your information with anyone except you.
+      </p>
+    </div>
+  </main>
+</body>
+
+</html>
