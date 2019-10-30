@@ -6,7 +6,7 @@ import httplib2
 import webbrowser
 from oauth2client import client, file
 
-SCOPE = 'https://www.googleapis.com/auth/gmail.readonly'
+SCOPE = 'https://www.googleapis.com/auth/gmail.labels'
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 DIR = os.path.dirname(os.path.realpath(__file__))
 CLIENT_SECRETS_PATH = os.path.join(DIR, 'client_secret.json')
