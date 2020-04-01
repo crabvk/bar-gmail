@@ -1,33 +1,27 @@
 #!/usr/bin/env python
 
-import os
-import pathlib
-import httplib2
-import webbrowser
-from oauth2client import client, file
+from pathlib import Path
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
 
 SCOPE = 'https://www.googleapis.com/auth/gmail.labels'
-REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
-DIR = os.path.dirname(os.path.realpath(__file__))
-CLIENT_SECRETS_PATH = os.path.join(DIR, 'client_secret.json')
-CREDENTIALS_PATH = os.path.join(DIR, 'credentials.json')
-storage = file.Storage(CREDENTIALS_PATH)
+DIR = Path(__file__).resolve().parent
+CLIENT_SECRETS_PATH = Path(DIR, 'client_secrets.json')
+CREDENTIALS_PATH = Path(DIR, 'credentials.json')
 
-if pathlib.Path(CREDENTIALS_PATH).is_file():
-    credentials = storage.get()
-    if isinstance(credentials, client.OAuth2Credentials):
-        try:
-            credentials.refresh(httplib2.Http())
-            print('Credentials successfully refreshed')
-        except client.HttpAccessTokenRefreshError:
-            print('Expired or revoked credentials. Try to remove credentials.json')
+if Path(CREDENTIALS_PATH).is_file():
+    creds = Credentials.from_authorized_user_file(CREDENTIALS_PATH)
+    if creds.expired and creds.refresh_token:
+        creds.refresh(Request())
     else:
-        print('credentials.json has wrong format, try to remove it')
+        print('Credentials are ok, try to remove credentials.json if something doesn\'t work')
+        exit()
 else:
-    flow = client.flow_from_clientsecrets(CLIENT_SECRETS_PATH, scope=SCOPE, redirect_uri=REDIRECT_URI)
-    auth_uri = flow.step1_get_authorize_url()
-    webbrowser.open(auth_uri)
-    auth_code = input('Enter the auth code: ')
-    credentials = flow.step2_exchange(auth_code)
-    storage.put(credentials)
-    print('Credentials successfully created')
+    flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_PATH, scopes=[SCOPE])
+    creds = flow.run_console()
+
+# Save credentials
+with open(CREDENTIALS_PATH, 'w') as creds_file:
+    creds_file.write(creds.to_json())
+print('Credentials successfully refreshed/created')

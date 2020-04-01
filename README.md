@@ -7,14 +7,14 @@ A [Polybar](https://github.com/jaagr/polybar) module to show unread messages fro
 ## Dependencies
 
 ```sh
-sudo pip install --upgrade oauth2client google-api-python-client
+pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
 ```
 
-**Font Awesome** - for email badge
+**Font Awesome** - default email icon
 
-**canberra-gtk-play** - for new email sound
+**canberra-gtk-play** - new email sound notification
 
-You can change the badge or turn off sound, for more info see [script arguments](#script-arguments)
+You can change the icon or turn off sound, for more info see [script arguments](#script-arguments)
 
 ## Installation
 
@@ -45,25 +45,26 @@ click-left = xdg-open https://mail.google.com
 
 `-l` or `--label` - set user's mailbox [label](https://developers.google.com/gmail/api/v1/reference/users/labels/list), default: INBOX
 
-`-p` or `--prefix` - set email badge, default: 
+`-p` or `--prefix` - set email icon, default: 
 
-`-c` or `--color` - set new email badge color, default: #e06c75
+`-c` or `--color` - set new email icon color, default: #e06c75
 
 `-ns` or `--nosound` - turn off new email sound
 
 ### Example
 
 ```sh
-./launch.py --label 'CATEGORY_PERSONAL' --prefix '📧' --color '#be5046' --nosound
+./launch.py --label 'CATEGORY_PERSONAL' --prefix '✉' --color '#be5046' --nosound
 ```
 
-## How to get full list of the mailbox labels
+## Get list of all your mailbox labels
 
 ```python
-from apiclient import discovery
-from oauth2client import file
+from googleapiclient.discovery import build
+from google.oauth2.credentials import Credentials
 
 CREDENTIALS_PATH = '/path/to/credentials.json'
-gmail = discovery.build('gmail', 'v1', credentials=file.Storage(CREDENTIALS_PATH).get())
+creds = Credentials.from_authorized_user_file(CREDENTIALS_PATH)
+gmail = build('gmail', 'v1', credentials=creds)
 gmail.users().labels().list(userId='me').execute()
 ```

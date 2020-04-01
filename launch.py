@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 
-import os
-import pathlib
-import subprocess
 import time
 import argparse
-from apiclient import discovery, errors
-from oauth2client import client, file
+import subprocess
+from pathlib import Path
+from googleapiclient import discovery, errors
+from google.oauth2.credentials import Credentials
 from httplib2 import ServerNotFoundError
 
 parser = argparse.ArgumentParser()
@@ -16,8 +15,8 @@ parser.add_argument('-c', '--color', default='#e06c75')
 parser.add_argument('-ns', '--nosound', action='store_true')
 args = parser.parse_args()
 
-DIR = os.path.dirname(os.path.realpath(__file__))
-CREDENTIALS_PATH = os.path.join(DIR, 'credentials.json')
+DIR = Path(__file__).resolve().parent
+CREDENTIALS_PATH = Path(DIR, 'credentials.json')
 
 unread_prefix = '%{F' + args.color + '}' + args.prefix + ' %{F-}'
 error_prefix = '%{F' + args.color + '}\uf06a %{F-}'
@@ -33,7 +32,8 @@ def print_count(count, is_odd=False):
     print(output, flush=True)
 
 def update_count(count_was):
-    gmail = discovery.build('gmail', 'v1', credentials=file.Storage(CREDENTIALS_PATH).get())
+    creds = Credentials.from_authorized_user_file(CREDENTIALS_PATH)
+    gmail = discovery.build('gmail', 'v1', credentials=creds)
     labels = gmail.users().labels().get(userId='me', id=args.label).execute()
     count = labels['messagesUnread']
     print_count(count)
@@ -45,7 +45,7 @@ print_count(0, True)
 
 while True:
     try:
-        if pathlib.Path(CREDENTIALS_PATH).is_file():
+        if Path(CREDENTIALS_PATH).is_file():
             count_was = update_count(count_was)
             time.sleep(10)
         else:
@@ -59,7 +59,4 @@ while True:
         time.sleep(5)
     except (ServerNotFoundError, OSError):
         print_count(count_was, True)
-        time.sleep(5)
-    except client.AccessTokenRefreshError:
-        print(error_prefix + 'revoked/expired credentials', flush=True)
         time.sleep(5)
