@@ -8,6 +8,7 @@ A [Polybar](https://github.com/jaagr/polybar) module to show unread messages fro
 
 ```sh
 pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+# or use poetry
 ```
 
 **Font Awesome** - default email icon
@@ -60,11 +61,5 @@ click-left = xdg-open https://mail.google.com
 ## Get list of all your mailbox labels
 
 ```python
-from googleapiclient.discovery import build
-from google.oauth2.credentials import Credentials
-
-CREDENTIALS_PATH = '/path/to/credentials.json'
-creds = Credentials.from_authorized_user_file(CREDENTIALS_PATH)
-gmail = build('gmail', 'v1', credentials=creds)
-gmail.users().labels().list(userId='me').execute()
+./list_labels.py
 ```

@@ -15,7 +15,7 @@ if Path(CREDENTIALS_PATH).is_file():
     if creds.expired and creds.refresh_token:
         creds.refresh(Request())
     else:
-        print('Credentials are ok, try to remove credentials.json if something doesn\'t work')
+        print('Credentials looks ok, try to remove credentials.json if something doesn\'t work')
         exit()
 else:
     flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_PATH, scopes=[SCOPE])
