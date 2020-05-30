@@ -12,6 +12,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-l', '--label', default='INBOX')
 parser.add_argument('-p', '--prefix', default='\uf0e0')
 parser.add_argument('-c', '--color', default='#e06c75')
+parser.add_argument('-t', '--text-color', default='#ffffff')
 parser.add_argument('-ns', '--nosound', action='store_true')
 args = parser.parse_args()
 
@@ -22,11 +23,14 @@ CREDENTIALS_PATH = Path(DIR, 'credentials.json')
 unread_prefix = '%{F' + args.color + '}' + args.prefix + ' %{F-}'
 error_prefix = '%{F' + args.color + '}\uf06a %{F-}'
 
+def print_color(s, c):
+    return '%{F' + c + '}' + s + ' %{F-}'
+
 def print_count(count, is_odd=False):
     tilde = '~' if is_odd else ''
     output = ''
     if count > 0:
-        output = unread_prefix + tilde + str(count)
+        output = print_color(args.prefix, args.color) + print_color(tilde + str(count), args.text_color)
     else:
         output = (args.prefix + ' ' + tilde).strip()
     print(output, flush=True)
