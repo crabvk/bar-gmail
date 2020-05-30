@@ -55,9 +55,9 @@ def update_curr_count(count):
 
 
 def read_prev_count():
-    with open(PREV_COUNT_DIR, 'w+') as f:
         try:
-            return int(f.read())
+            with open(PREV_COUNT_DIR, 'r+') as f:
+                return int(f.read())
         except:
             return 0
 
