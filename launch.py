@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import time
+import os
 import argparse
 import subprocess
 from pathlib import Path
@@ -16,11 +16,11 @@ parser.add_argument('-ns', '--nosound', action='store_true')
 args = parser.parse_args()
 
 DIR = Path(__file__).resolve().parent
+PREV_COUNT_DIR = '/dev/shm/mail_count'
 CREDENTIALS_PATH = Path(DIR, 'credentials.json')
 
 unread_prefix = '%{F' + args.color + '}' + args.prefix + ' %{F-}'
 error_prefix = '%{F' + args.color + '}\uf06a %{F-}'
-count_was = 0
 
 def print_count(count, is_odd=False):
     tilde = '~' if is_odd else ''
@@ -39,24 +39,35 @@ def update_count(count_was):
     print_count(count)
     if not args.nosound and count_was < count and count > 0:
         subprocess.run(['canberra-gtk-play', '-i', 'message'])
+        update_curr_count(count)
     return count
 
-print_count(0, True)
+def update_curr_count(count):
+    with open(PREV_COUNT_DIR, 'w+') as f:
+        try:
+            f.write(str(count))
+        except:
+            return 0
 
-while True:
-    try:
-        if Path(CREDENTIALS_PATH).is_file():
-            count_was = update_count(count_was)
-            time.sleep(10)
-        else:
-            print(error_prefix + 'credentials not found', flush=True)
-            time.sleep(2)
-    except errors.HttpError as error:
-        if error.resp.status == 404:
-            print(error_prefix + f'"{args.label}" label not found', flush=True)
-        else:
-            print_count(count_was, True)
-        time.sleep(5)
-    except (ServerNotFoundError, OSError):
-        print_count(count_was, True)
-        time.sleep(5)
+
+def read_prev_count():
+    with open(PREV_COUNT_DIR, 'w+') as f:
+        try:
+            return int(f.read())
+        except:
+            return 0
+
+try:
+    if Path(CREDENTIALS_PATH).is_file():
+        count_was = read_prev_count()
+        count_is = update_count(count_was)
+    else:
+        print(error_prefix + 'credentials not found', flush=True)
+except errors.HttpError as error:
+    if error.resp.status == 404:
+        print(error_prefix + f'"{args.label}" label not found', flush=True)
+    else:
+        print_count(count_is, True)
+except (ServerNotFoundError, OSError):
+    print_count(count_is, True)
+
