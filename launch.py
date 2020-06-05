@@ -12,12 +12,11 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-l', '--label', default='INBOX')
 parser.add_argument('-p', '--prefix', default='\uf0e0')
 parser.add_argument('-c', '--color', default='#e06c75')
-parser.add_argument('-t', '--text-color', default='#ffffff')
 parser.add_argument('-ns', '--nosound', action='store_true')
 args = parser.parse_args()
 
 DIR = Path(__file__).resolve().parent
-PREV_COUNT_DIR = '/dev/shm/mail_count'
+PREV_COUNT_DIR = '/tmp/mail_count'
 CREDENTIALS_PATH = Path(DIR, 'credentials.json')
 
 unread_prefix = '%{F' + args.color + '}' + args.prefix + ' %{F-}'
@@ -30,7 +29,7 @@ def print_count(count, is_odd=False):
     tilde = '~' if is_odd else ''
     output = ''
     if count > 0:
-        output = print_color(args.prefix, args.color) + print_color(tilde + str(count), args.text_color)
+        output = print_color(args.prefix, args.color)
     else:
         output = (args.prefix + ' ' + tilde).strip()
     print(output, flush=True)
@@ -41,8 +40,9 @@ def update_count(count_was):
     labels = gmail.users().labels().get(userId='me', id=args.label).execute()
     count = labels['messagesUnread']
     print_count(count)
-    if not args.nosound and count_was < count and count > 0:
-        subprocess.run(['canberra-gtk-play', '-i', 'message'])
+    if count_was != count:
+        if not args.nosound and count > count_was:
+            subprocess.run(['canberra-gtk-play', '-i', 'message'])
         update_curr_count(count)
     return count
 
@@ -55,11 +55,11 @@ def update_curr_count(count):
 
 
 def read_prev_count():
-        try:
-            with open(PREV_COUNT_DIR, 'r+') as f:
-                return int(f.read())
-        except:
-            return 0
+    try:
+        with open(PREV_COUNT_DIR, 'r+') as f:
+            return int(f.read())
+    except:
+        return 0
 
 try:
     if Path(CREDENTIALS_PATH).is_file():
@@ -71,7 +71,6 @@ except errors.HttpError as error:
     if error.resp.status == 404:
         print(error_prefix + f'"{args.label}" label not found', flush=True)
     else:
-        print_count(count_is, True)
+        print('There was an Http Error')
 except (ServerNotFoundError, OSError):
-    print_count(count_is, True)
-
+    print('Server not found')
