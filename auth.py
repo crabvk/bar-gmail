@@ -14,7 +14,7 @@ CREDENTIALS_PATH = Path(DIR, 'credentials.json')
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-a", "--addaccount", action='store_true')
-parser.add_argument("-c", "--color", default= "#ffffff")
+parser.add_argument("-c", "--color", default= "#e06c75")
 args = parser.parse_args()
 
 credentials = {

@@ -29,16 +29,28 @@ mv polybar-gmail-master gmail
 and obtain/refresh credentials
 
 ```sh
-~/.config/polybar/gmail/auth.py
+~/.config/polybar/gmail/auth.py -c <rgb-color>
 ```
+
+You can add multiple credentials using
+
+```sh
+~/.config/polybar/gmail/auth.py -addaccount -c <rgb-color>
+```
+
+## Auth arguments
+
+`-a` or `--addaccount` - to add a new account. If not set, each credential stored will be checked for expiration and asked for refresh if needed
+
+`-c` or `--color` - set credential email icon color for notification, default: #e06c75
 
 ### Module
 
 ```ini
 [module/gmail]
 type = custom/script
-exec = ~/.config/polybar/gmail/launch.py
-tail = true
+exec = python3 ~/.config/polybar/gmail/launch.py --prefix 
+interval = 5
 click-left = xdg-open https://mail.google.com
 ```
 
@@ -48,14 +60,12 @@ click-left = xdg-open https://mail.google.com
 
 `-p` or `--prefix` - set email icon, default: 
 
-`-c` or `--color` - set new email icon color, default: #e06c75
-
 `-ns` or `--nosound` - turn off new email sound
 
 ### Example
 
 ```sh
-./launch.py --label 'CATEGORY_PERSONAL' --prefix '✉' --color '#be5046' --nosound
+./launch.py --label 'CATEGORY_PERSONAL' --prefix '✉' --nosound
 ```
 
 ## Get list of all your mailbox labels
