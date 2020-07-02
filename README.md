@@ -44,6 +44,8 @@ You can add multiple credentials using
 
 `-c` or `--color` - set credential email icon color for notification, default: #e06c75
 
+`-t` or `--tag` - (optional) set a local identifier for each account, default: ''
+
 ### Module
 
 ```ini
@@ -56,7 +58,7 @@ click-left = xdg-open https://mail.google.com
 
 ## Script arguments
 
-`-l` or `--label` - set user's mailbox [label](https://developers.google.com/gmail/api/v1/reference/users/labels/list), default: INBOX
+`-l` or `--label` - set user's mailbox separated by comma [label](https://developers.google.com/gmail/api/v1/reference/users/labels/list), default: 'INBOX'
 
 `-p` or `--prefix` - set email icon, default: 
 

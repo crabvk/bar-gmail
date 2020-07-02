@@ -33,10 +33,10 @@ def print_count(count, color, is_odd=False):
         output = ''
     return output
 
-def update_count(count_was, creds, color):
+def update_count(count_was, creds, label, color):
     cred = Credentials.from_authorized_user_info(creds)
     gmail = discovery.build('gmail', 'v1', credentials=cred)
-    labels = gmail.users().labels().get(userId='me', id=args.label).execute()
+    labels = gmail.users().labels().get(userId='me', id=label).execute()
     count = labels['messagesUnread']
     aux = print_count(count, color)
     if count_was != count:
@@ -75,15 +75,23 @@ try:
                 prev_read.append(0)
     else:
         prev_read = [0] * n_accounts
+    labels = args.label.split(",")
+    #in case we didn't supply enough labels
+    if len(labels) < n_accounts:
+        for i in range(0, n_accounts - len(labels)):
+            labels.append("INBOX") #default
+    #in case the user supplied too much labels
+    if len(labels) > n_accounts:
+        labels = labels[0:n_accounts]
     for i in range(0, n_accounts):
         credential = credentials["creds"][i]
-        prev_read[i], aux = update_count(prev_read[i], credential["cred"] ,credential["color"])
+        prev_read[i], aux = update_count(prev_read[i], credential["cred"], labels[i], credential["color"])
         printable += aux + ' '
     print(printable)
     update_curr_count(prev_read)
 except errors.HttpError as error:
     if error.resp.status == 404:
-        print(error_prefix + f'"{args.label}" label not found', flush=True)
+        print(error_prefix + 'Probably, one of the labels was not found', flush=True)
     else:
         print('There was an Http Error')
 except (ServerNotFoundError, OSError):

@@ -15,6 +15,7 @@ CREDENTIALS_PATH = Path(DIR, 'credentials.json')
 parser = argparse.ArgumentParser()
 parser.add_argument("-a", "--addaccount", action='store_true')
 parser.add_argument("-c", "--color", default= "#e06c75")
+parser.add_argument("-tag", "--tag", default='')
 args = parser.parse_args()
 
 credentials = {
@@ -26,7 +27,7 @@ def add_cred():
     flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_PATH, scopes=[SCOPE])
     creds = flow.run_console()
     credentials["count"] += 1
-    credentials["creds"].append( { "color": args.color, "cred" : json.loads(creds.to_json()) } )
+    credentials["creds"].append( { "tag":args.tag, "color": args.color, "cred" : json.loads(creds.to_json()) } )
 
 
 if Path(CREDENTIALS_PATH).is_file():
