@@ -32,6 +32,7 @@ def add_cred():
 if Path(CREDENTIALS_PATH).is_file():
     with open(CREDENTIALS_PATH, 'r') as f:
             credentials = json.load(f)
+    f.close()
     if args.addaccount:
         add_cred()
     else:
@@ -52,4 +53,5 @@ else:
 # Save credentials
 with open(CREDENTIALS_PATH, 'w') as creds_file:
     json.dump(credentials, creds_file)
+creds_file.close()
 print('Credentials successfully refreshed/created')
