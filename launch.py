@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 import argparse
@@ -31,18 +31,18 @@ def print_count(count, color, is_odd=False):
     else:
         #output = (args.prefix + ' ' + tilde).strip()
         output = ''
-    print(output, flush=True)
+    return output
 
 def update_count(count_was, creds, color):
     cred = Credentials.from_authorized_user_info(creds)
     gmail = discovery.build('gmail', 'v1', credentials=cred)
     labels = gmail.users().labels().get(userId='me', id=args.label).execute()
     count = labels['messagesUnread']
-    print_count(count, color)
+    aux = print_count(count, color)
     if count_was != count:
         if not args.nosound and count > count_was:
             subprocess.run(['canberra-gtk-play', '-i', 'message'])
-    return count
+    return count, aux
 
 def update_curr_count(counts):
     data = ",".join([str(i) for i in counts])
@@ -55,6 +55,7 @@ def update_curr_count(counts):
 
 try:
     n_accounts = 0
+    printable = ''
     #Reading credentials
     if Path(CREDENTIALS_PATH).is_file():
         with open(CREDENTIALS_PATH, 'r') as f:
@@ -76,7 +77,9 @@ try:
         prev_read = [0] * n_accounts
     for i in range(0, n_accounts):
         credential = credentials["creds"][i]
-        prev_read[i] = update_count(prev_read[i], credential["cred"] ,credential["color"])
+        prev_read[i], aux = update_count(prev_read[i], credential["cred"] ,credential["color"])
+        printable += aux + ' '
+    print(printable)
     update_curr_count(prev_read)
 except errors.HttpError as error:
     if error.resp.status == 404:
