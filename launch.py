@@ -6,6 +6,7 @@ import subprocess
 from pathlib import Path
 from googleapiclient import discovery, errors
 from google.oauth2.credentials import Credentials
+from google.auth.exceptions import TransportError
 from httplib2 import ServerNotFoundError
 
 parser = argparse.ArgumentParser()
@@ -22,6 +23,7 @@ unread_prefix = '%{F' + args.color + '}' + args.prefix + ' %{F-}'
 error_prefix = '%{F' + args.color + '}\uf06a %{F-}'
 count_was = 0
 
+
 def print_count(count, is_odd=False):
     tilde = '~' if is_odd else ''
     output = ''
@@ -30,6 +32,7 @@ def print_count(count, is_odd=False):
     else:
         output = (args.prefix + ' ' + tilde).strip()
     print(output, flush=True)
+
 
 def update_count(count_was):
     creds = Credentials.from_authorized_user_file(CREDENTIALS_PATH)
@@ -40,6 +43,7 @@ def update_count(count_was):
     if not args.nosound and count_was < count and count > 0:
         subprocess.run(['canberra-gtk-play', '-i', 'message'])
     return count
+
 
 print_count(0, True)
 
@@ -57,6 +61,6 @@ while True:
         else:
             print_count(count_was, True)
         time.sleep(5)
-    except (ServerNotFoundError, OSError):
+    except (ServerNotFoundError, OSError, TransportError):
         print_count(count_was, True)
         time.sleep(5)

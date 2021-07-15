@@ -2,7 +2,7 @@
 
 A [Polybar](https://github.com/jaagr/polybar) module to show unread messages from Gmail.
 
-![preview](https://github.com/vyachkonovalov/polybar-gmail/raw/master/preview.png)
+![preview](https://github.com/crabvk/polybar-gmail/raw/master/preview.png)
 
 ## Dependencies
 
@@ -21,7 +21,7 @@ You can change the icon or turn off sound, for more info see [script arguments](
 
 ```sh
 cd ~/.config/polybar
-curl -LO https://github.com/vyachkonovalov/polybar-gmail/archive/master.tar.gz
+curl -LO https://github.com/crabvk/polybar-gmail/archive/master.tar.gz
 tar zxf master.tar.gz && rm master.tar.gz
 mv polybar-gmail-master gmail
 ```
