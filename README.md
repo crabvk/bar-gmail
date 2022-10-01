@@ -50,6 +50,10 @@ click-left = xdg-open https://mail.google.com
 
 `-c` or `--color` - set new email icon color, default: #e06c75
 
+`-bg` or `--color` - set new background color, default:
+
+`-w` or `--wal`    - use pywal for colors
+
 `-ns` or `--nosound` - turn off new email sound
 
 ### Example
