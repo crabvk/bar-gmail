@@ -52,6 +52,8 @@ click-left = xdg-open https://mail.google.com
 
 `-ns` or `--nosound` - turn off new email sound
 
+`-cr` or `--credentials` - path to your `credentials.json`, defaults to `credentials.json`
+
 ### Example
 
 ```sh
