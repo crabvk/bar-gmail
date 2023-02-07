@@ -20,7 +20,11 @@ args = parser.parse_args()
 DIR = Path(__file__).resolve().parent
 CREDENTIALS_PATH = Path(DIR, args.credentials)
 
-unread_prefix = '%{F' + args.color + '}' + args.prefix + ' %{F-}'
+if args.color == "":
+    unread_prefix = args.prefix
+else:
+    unread_prefix = '%{F' + args.color + '}' + args.prefix + ' %{F-}'
+
 error_prefix = '%{F' + args.color + '}\uf06a %{F-}'
 count_was = 0
 
