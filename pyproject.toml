@@ -7,15 +7,16 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.10.7"
-google-api-python-client = "^2.66.0"
-google-auth-httplib2 = "^0.1.0"
-google-auth-oauthlib = "^0.7.1"
-autopep8 = "^2.0.0"
+google-api-python-client = "^2.100.0"
+google-auth-httplib2 = "^0.1.1"
+google-auth-oauthlib = "^1.1.0"
 
 [tool.poetry.dev-dependencies]
+pip = "^23.2.1"
+autopep8 = "^2.0.4"
 
 [build-system]
-requires = ["poetry>=1.1.0"]
+requires = ["poetry>=1.6.0"]
 build-backend = "poetry.masonry.api"
 
 [tool.autopep8]
