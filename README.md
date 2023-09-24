@@ -1,67 +1,97 @@
-# Polybar Gmail
-
-A [Polybar](https://github.com/jaagr/polybar) module to show unread messages from Gmail.
+# Bar Gmail
 
 ![preview](https://github.com/crabvk/polybar-gmail/raw/master/preview.png)
 
+Get notifications and unread messages count from Gmail (Waybar/Polybar module).
+
 ## Dependencies
 
-```sh
-pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
-# or use poetry
-```
+* Font Awesome: default badge 
+* Libnotify: new email notifications, can be disabled with `--no-notify` flag.
+* Libcanberra: notification sound (optional).
 
-**Font Awesome** - default email icon
+To display notifications you must have a [notification daemon](https://wiki.archlinux.org/title/Desktop_notifications#Notification_servers) running on your system.
 
-**canberra-gtk-play** - new email sound notification
+## Install
 
-You can change the icon or turn off sound, for more info see [script arguments](#script-arguments)
+### ArchLinux and derivatives
 
-## Installation
+[AUR package](https://aur.archlinux.org/packages/bar-gmail/)
 
-```sh
-cd ~/.config/polybar
-curl -LO https://github.com/crabvk/polybar-gmail/archive/master.tar.gz
-tar zxf master.tar.gz && rm master.tar.gz
-mv polybar-gmail-master gmail
-```
-
-and obtain/refresh credentials
+### Other distros
 
 ```sh
-~/.config/polybar/gmail/auth.py
+git clone https://github.com/crabvk/bar-gmail.git
+cd bar-gmail
+git describe --abbrev=0 --tags # Get latest tag.
+git checkoug LATEST_TAG
+pip install -e .
 ```
 
-### Module
+And now you can execute *~/.local/bin/bar-gmail*
+
+## Usage
+
+First, you need to authenticate the client:
+
+```sh
+bar-gmail auth
+```
+
+Then just run `bar-gmail` or `bar-gmail --format polybar` periodically to get unread messages count and new message notifications.
+Credentials and session are stored in *~/.cache/bar-gmail*.
+
+## Waybar config example
+
+*~/.config/waybar/config*
+
+```json
+"modules-right": {
+    "custom/gmail"
+}
+
+"custom/gmail": {
+    "exec": "bar-gmail",
+    "return-type": "json",
+    "interval": 10,
+    "tooltip": false,
+    "on-click": "xdg-open https://mail.google.com/mail/u/0/#inbox"
+}
+```
+
+*~/.config/waybar/style.css*
+
+```css
+#custom-gmail.unread {
+    color: white;
+}
+#custom-gmail.inaccurate {
+    color: darkorange;
+}
+#custom-gmail.error {
+    color: darkred;
+}
+```
+
+## Polybar config example
 
 ```ini
+modules-right = gmail
+...
 [module/gmail]
 type = custom/script
-exec = ~/.config/polybar/gmail/launch.py
-tail = true
-click-left = xdg-open https://mail.google.com
+exec = bar-gmail -f polybar
+interval = 10
+click-left = xdg-open https://mail.google.com/mail/u/0/#inbox
 ```
 
 ## Script arguments
 
-`-l` or `--label` - set user's mailbox [label](https://developers.google.com/gmail/api/v1/reference/users/labels/list), default: INBOX
+See `bar-gmail --help` for the full list of available subcommands and command arguments.
+Possible values for `-s`, `--sound` can be obtained with:
 
-`-p` or `--prefix` - set email icon, default: 
-
-`-c` or `--color` - set new email icon color, default: #e06c75
-
-`-ns` or `--nosound` - turn off new email sound
-
-`-cr` or `--credentials` - path to your `credentials.json`, defaults to `credentials.json`
-
-### Example
-
-```sh
-./launch.py --label 'CATEGORY_PERSONAL' --prefix '✉' --color '#be5046' --nosound
+```shell
+ls /usr/share/sounds/freedesktop/stereo/ | cut -d. -f1
 ```
 
-## Get list of all your mailbox labels
-
-```python
-./list_labels.py
-```
+for example `bar-gmail --sound message-new-instant`.

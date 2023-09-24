@@ -1,9 +1,21 @@
 [tool.poetry]
-name = "polybar-gmail"
-version = "0.2.1"
-description = "Polybar module to show unread messages from Gmail"
-authors = ["Vyacheslav Konovalov <crabvk@protonmail.com>"]
+name = "bar-gmail"
+version = "1.0.0"
+description = "Get notifications and unread messages count from Gmail (Waybar/Polybar module)"
 license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/crabvk/bar-gmail"
+authors = ["Vyacheslav Konovalov <crabvk@protonmail.com>"]
+keywords = ["waybar", "polybar", "gmail"]
+classifiers = [
+    "Environment :: Console",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License"
+]
+
+[tool.poetry.scripts]
+bar-gmail = "bar_gmail:cli"
 
 [tool.poetry.dependencies]
 python = "^3.10.7"
@@ -11,13 +23,13 @@ google-api-python-client = "^2.100.0"
 google-auth-httplib2 = "^0.1.1"
 google-auth-oauthlib = "^1.1.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pip = "^23.2.1"
 autopep8 = "^2.0.4"
 
 [build-system]
-requires = ["poetry>=1.6.0"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.autopep8]
 max_line_length = 100
