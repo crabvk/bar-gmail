@@ -92,7 +92,6 @@ class Application:
                 if any(history['messages']) and self.sound_id:
                     self._play_sound()
                 for message in history['messages']:
-                    print(message)
                     self._send_notification(message)
                 session['history_id'] = history['history_id']
                 with open(self.session_path, 'w') as f:
