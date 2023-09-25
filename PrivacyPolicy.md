@@ -4,9 +4,7 @@ We are not interested in collecting any personal information. We believe such in
 
 ## What Information Do We Access?
 
-During the process of its execution the app ("Bar Gmail") fetches unread messages count and email headers (such as "From" and "Subject") of your email messages only to show this data to you (End User). This data is shown to you via terminal and desktop notifications without sharing it with anybody. During the process of authentication, authentication and refresh tokens are stored solely on your device and no where else.
-
-The project is open sourced, its code is accessible at [github repo](https://github.com/crabvk/bar-gmail).
+During the process of execution the app ("Bar Gmail") fetches unread messages count and email headers (such as "From" and "Subject") of your email messages only to show this data to you via terminal and desktop notifications without sharing it with anybody. When authenticated the authentication and refresh tokens are stored solely on your device and no where else.
 
 ## What Information Do We Collect?
 
