@@ -12,13 +12,24 @@ Get notifications and unread messages count from Gmail (Waybar/Polybar module).
 
 To display notifications you must have a [notification daemon](https://wiki.archlinux.org/title/Desktop_notifications#Notification_servers) running on your system.
 
-## Install
+## Installation
 
-### ArchLinux and derivatives
+Use one of the following methods.
 
-[AUR package](https://aur.archlinux.org/packages/bar-gmail/)
+### AUR package on ArchLinux and derivatives
 
-### Other distros
+https://aur.archlinux.org/packages/bar-gmail/
+
+### With pip from pypi.org
+
+```sh
+pip install --user bar-gmail
+~/.local/bin/bar-gmail
+```
+
+Depending on your system you may also need to add the `--break-system-packages` flag.
+
+### With pip from git repo
 
 ```sh
 git clone https://github.com/crabvk/bar-gmail.git
@@ -26,9 +37,8 @@ cd bar-gmail
 git describe --abbrev=0 --tags # Get latest tag.
 git checkoug LATEST_TAG
 pip install -e .
+~/.local/bin/bar-gmail
 ```
-
-And now you can execute *~/.local/bin/bar-gmail*
 
 ## Usage
 
