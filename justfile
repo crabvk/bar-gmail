@@ -1,4 +1,5 @@
 build:
+    rm -rf ./dist
     poetry build
 
 install:

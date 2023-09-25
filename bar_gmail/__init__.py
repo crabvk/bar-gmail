@@ -41,16 +41,16 @@ def cli():
     if not CACHE_DIR.is_dir():
         CACHE_DIR.mkdir(exist_ok=True)
 
-    if not CREDENTIALS_PATH.is_file():
-        print('Credentials not found. Run `bar-gmail auth` for authentication.', file=sys.stderr)
-        exit(1)
-
     gmail = Gmail(CLIENT_SECRETS_PATH, CREDENTIALS_PATH)
 
     if args.subcommand == 'auth':
         if gmail.authenticate():
             print('Authenticated successfully.')
         exit()
+
+    if not CREDENTIALS_PATH.is_file():
+        print('Credentials not found. Run `bar-gmail auth` for authentication.', file=sys.stderr)
+        exit(1)
 
     if args.subcommand == 'labels':
         for label in gmail.get_labels():
