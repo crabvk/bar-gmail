@@ -49,6 +49,7 @@ bar-gmail auth
 ```
 
 Then just run `bar-gmail` or `bar-gmail --format polybar` periodically to get unread messages count and new message notifications.
+
 Credentials and session are stored in *~/.cache/bar-gmail*.
 
 ## Waybar config example
@@ -98,7 +99,8 @@ click-left = xdg-open https://mail.google.com/mail/u/0/#inbox
 ## Script arguments
 
 See `bar-gmail --help` for the full list of available subcommands and command arguments.
-Possible values for `-s`, `--sound` can be obtained with:
+
+Possible values for `-s`, `--sound` is obtained with:
 
 ```shell
 ls /usr/share/sounds/freedesktop/stereo/ | cut -d. -f1

@@ -31,8 +31,9 @@ class Gmail():
     def _filter_headers(headers: list) -> dict:
         result = {}
         for header in headers:
-            if header['name'] == 'From' or header['name'] == 'Subject':
-                result[header['name']] = header['value']
+            name = header['name'].lower()
+            if name in ['from', 'subject']:
+                result[name] = header['value']
         return result
 
     def authenticate(self) -> bool:

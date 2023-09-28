@@ -60,7 +60,7 @@ class Application:
 
     def _send_notification(self, message):
         try:
-            Popen(['notify-send', *self.notification_args, message['From'], message['Subject']],
+            Popen(['notify-send', *self.notification_args, message['from'], message['subject']],
                   stderr=open(os.devnull, 'wb'))
         except FileNotFoundError:
             pass

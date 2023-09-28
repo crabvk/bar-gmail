@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bar-gmail"
-version = "1.0.2"
+version = "1.0.3"
 description = "Get notifications and unread messages count from Gmail (Waybar/Polybar module)"
 license = "MIT"
 readme = "README.md"
