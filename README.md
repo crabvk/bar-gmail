@@ -4,10 +4,9 @@
 
 Get notifications and unread messages count from Gmail (Waybar/Polybar module).
 
-## Dependencies
+## Requirements
 
 * Font Awesome: default badge 
-* Libnotify: new email notifications, can be disabled with `--no-notify` flag.
 * Libcanberra: notification sound (optional).
 
 To display notifications you must have a [notification daemon](https://wiki.archlinux.org/title/Desktop_notifications#Notification_servers) running on your system.

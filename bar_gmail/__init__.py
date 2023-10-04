@@ -23,7 +23,7 @@ def cli():
                         help='Notification sound (event sound ID from canberra-gtk-play).')
     parser.add_argument('-u', '--urgency', choices=['low', 'normal', 'critical'],
                         default='normal', help='Notification urgency level [default: normal].')
-    parser.add_argument('-t', '--expire-time', type=int,
+    parser.add_argument('-t', '--expire-timeout', type=int, default=0,
                         help='The duration, in milliseconds, for the notification to appear on screen.')
     parser.add_argument('-dn', '--no-notify', action='store_true',
                         help='Disable new email notifications.')
@@ -67,8 +67,8 @@ def cli():
                       color=args.color,
                       label=args.label,
                       sound_id=args.sound,
-                      urgency_level=UrgencyLevel(args.urgency),
-                      expire_time=args.expire_time,
+                      urgency_level=UrgencyLevel[args.urgency.upper()],
+                      expire_timeout=args.expire_timeout,
                       is_notify=not args.no_notify)
     app.run()
 

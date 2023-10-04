@@ -4,25 +4,30 @@ import time
 from enum import Enum
 from pathlib import Path
 from subprocess import Popen
+from gi.repository import GLib
+from dasbus.connection import SessionMessageBus
+from dasbus.error import DBusError
 from bar_gmail.gmail import Gmail
 from bar_gmail.printer import WaybarPrinter, PolybarPrinter
 from google.auth.exceptions import TransportError
 from googleapiclient.errors import HttpError
 
+APP_NAME = 'Bar Gmail'
+NOTIFICATION_CATEGORY = 'email.arrived'
 BASE_DIR = Path(__file__).resolve().parent
 GMAIL_ICON_PATH = Path(BASE_DIR, 'gmail_icon.svg')
 
 
 class UrgencyLevel(Enum):
-    LOW = 'low'
-    NORMAL = 'normal'
-    CRITICAL = 'critical'
+    LOW = 0
+    NORMAL = 1
+    CRITICAL = 2
 
 
 class Application:
     def __init__(self, session_path: Path, gmail: Gmail, printer: WaybarPrinter | PolybarPrinter,
                  badge: str, color: str | None, label: str, sound_id: str,
-                 urgency_level: UrgencyLevel, expire_time: int, is_notify: bool):
+                 urgency_level: UrgencyLevel, expire_timeout: int, is_notify: bool):
         self.session_path = session_path
         self.gmail = gmail
         self.printer = printer
@@ -30,22 +35,9 @@ class Application:
         self.label = label
         self.sound_id = sound_id
         self.urgency_level = urgency_level
-        self.expire_time = expire_time
+        self.expire_timeout = expire_timeout
         self.is_notify = is_notify
         self.color = color
-        args = []
-        # Set application name.
-        args.extend(('-a', 'Bar Gmail'))
-        # Set category.
-        args.extend(('-c', 'email.arrived'))
-        # Set icon.
-        args.extend(('-i', GMAIL_ICON_PATH))
-        # Set urgency level.
-        args.extend(('-u', self.urgency_level.value))
-        # Set notification expiration time.
-        if self.expire_time is not None:
-            args.extend(('-t', self.expire_time))
-        self.notification_args = args
 
     @staticmethod
     def _is_innacurate(since: float) -> bool:
@@ -58,11 +50,32 @@ class Application:
         except FileNotFoundError:
             pass
 
-    def _send_notification(self, message):
+    def _send_notifications(self, messages):
         try:
-            Popen(['notify-send', *self.notification_args, message['from'], message['subject']],
-                  stderr=open(os.devnull, 'wb'))
-        except FileNotFoundError:
+            bus = SessionMessageBus()
+            proxy = bus.get_proxy(
+                'org.freedesktop.Notifications',
+                '/org/freedesktop/Notifications'
+            )
+
+            app_icon = str(GMAIL_ICON_PATH)
+            replaces_id = 0
+            actions = []
+
+            # https://lazka.github.io/pgi-docs/GLib-2.0/classes/VariantType.html#GLib.VariantType
+            hints = {
+                'category': GLib.Variant('s', NOTIFICATION_CATEGORY),
+                'urgency': GLib.Variant('y', self.urgency_level.value),
+            }
+
+            for message in messages:
+                summary = message['from']
+                body = message['subject']
+
+                # https://specifications.freedesktop.org/notification-spec/notification-spec-latest.html
+                proxy.Notify(APP_NAME, replaces_id, app_icon, summary,
+                             body, actions, hints, self.expire_timeout)
+        except DBusError:
             pass
 
     def run(self):
@@ -89,10 +102,10 @@ class Application:
 
             if session['history_id']:
                 history = self.gmail.get_history_since(session['history_id'])
-                if any(history['messages']) and self.sound_id:
-                    self._play_sound()
-                for message in history['messages']:
-                    self._send_notification(message)
+                if any(history['messages']):
+                    if self.sound_id:
+                        self._play_sound()
+                    self._send_notifications(history['messages'])
                 session['history_id'] = history['history_id']
                 with open(self.session_path, 'w') as f:
                     json.dump(session, f)

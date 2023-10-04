@@ -122,6 +122,17 @@ files = [
 ]
 
 [[package]]
+name = "dasbus"
+version = "1.7"
+description = "DBus library in Python 3"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "dasbus-1.7-py3-none-any.whl", hash = "sha256:0a9433e9e72c2c865fa2d5ef824ac4ef49b540cf57f6396e515c2f314e5c14cd"},
+    {file = "dasbus-1.7.tar.gz", hash = "sha256:a8850d841adfe8ee5f7bb9f82cf449ab9b4950dc0633897071718e0d0036b6f6"},
+]
+
+[[package]]
 name = "google-api-core"
 version = "2.11.1"
 description = "Google API client core library"
@@ -335,6 +346,30 @@ files = [
 pyasn1 = ">=0.4.6,<0.6.0"
 
 [[package]]
+name = "pycairo"
+version = "1.25.0"
+description = "Python interface for cairo"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pycairo-1.25.0-cp310-cp310-win32.whl", hash = "sha256:a8b08f198a45b5e505c1475ed9c3b1a39993b9ebff0e18dd9f194927de6411b7"},
+    {file = "pycairo-1.25.0-cp310-cp310-win_amd64.whl", hash = "sha256:f5d29720075d0d3cc1eef8abb3a3069951b466f04583976adfd770e71bc5be3a"},
+    {file = "pycairo-1.25.0-cp310-cp310-win_arm64.whl", hash = "sha256:7f1390e5e81719bfcf30ad667c09188caa1d3bd190f9af40efcd13e25b7cf25b"},
+    {file = "pycairo-1.25.0-cp311-cp311-win32.whl", hash = "sha256:2e4da8be0a696c2e8a1709f5a2bd849e802147769439ea4268f926695f4b5a55"},
+    {file = "pycairo-1.25.0-cp311-cp311-win_amd64.whl", hash = "sha256:c40ce034a07266460bc3318a179aa43b2824d36754906831a90c99fb4f246370"},
+    {file = "pycairo-1.25.0-cp311-cp311-win_arm64.whl", hash = "sha256:6654201d10c5f13975caec648796b1e0e2b0f8af1e4302a086dc3183bb8346ee"},
+    {file = "pycairo-1.25.0-cp312-cp312-win32.whl", hash = "sha256:caa76409cae523f7c5254ee75935d8d520efa96eaf22c64f26c8e24ca74f8281"},
+    {file = "pycairo-1.25.0-cp312-cp312-win_amd64.whl", hash = "sha256:ec0e05fe7a0d2fc1ef0d6babc19b8b2d731af3ab1638fcdcaad2d42204a487f2"},
+    {file = "pycairo-1.25.0-cp312-cp312-win_arm64.whl", hash = "sha256:8690cc2cba6bd223cc9703a9a7b392fe1bec78003662c6dbc9869d81ee343bdf"},
+    {file = "pycairo-1.25.0-cp38-cp38-win32.whl", hash = "sha256:439c62c3c744aabb70ab6b97f04e0d58e587cc35c2e9f52d1bb2f47f852ea2de"},
+    {file = "pycairo-1.25.0-cp38-cp38-win_amd64.whl", hash = "sha256:9f0ee34c6ca1e7ef970d51fb68e5a6a02a374d2e679ceddf891dfc53408b11c7"},
+    {file = "pycairo-1.25.0-cp39-cp39-win32.whl", hash = "sha256:659b0b701767bbfe16ad3cb291717039555bf4d0b857f64acc7e40e1b39660bc"},
+    {file = "pycairo-1.25.0-cp39-cp39-win_amd64.whl", hash = "sha256:1eb0fe7738e770057017f185a76aaad9aa280da1bdf0571fb85b7e116eeb3001"},
+    {file = "pycairo-1.25.0-cp39-cp39-win_arm64.whl", hash = "sha256:c986f7ee44dee9c6b119604f8f33480d9f5410e550a8bbda5d333742a867a53c"},
+    {file = "pycairo-1.25.0.tar.gz", hash = "sha256:37842b9bfa6339c45a5025f752e1d78d5840b1a0f82303bdd5610846ad8b5c4f"},
+]
+
+[[package]]
 name = "pycodestyle"
 version = "2.11.0"
 description = "Python style guide checker"
@@ -344,6 +379,19 @@ files = [
     {file = "pycodestyle-2.11.0-py2.py3-none-any.whl", hash = "sha256:5d1013ba8dc7895b548be5afb05740ca82454fd899971563d2ef625d090326f8"},
     {file = "pycodestyle-2.11.0.tar.gz", hash = "sha256:259bcc17857d8a8b3b4a2327324b79e5f020a13c16074670f9c8c8f872ea76d0"},
 ]
+
+[[package]]
+name = "pygobject"
+version = "3.46.0"
+description = "Python bindings for GObject Introspection"
+optional = false
+python-versions = ">=3.8, <4"
+files = [
+    {file = "PyGObject-3.46.0.tar.gz", hash = "sha256:481437b05af0a66b7c366ea052710eb3aacbb979d22d30b797f7ec29347ab1e6"},
+]
+
+[package.dependencies]
+pycairo = ">=1.16,<2.0"
 
 [[package]]
 name = "pyparsing"
@@ -465,4 +513,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10.7"
-content-hash = "0ea4e262e36a57eb7dc94a5794215304894b1baa1c46c3379c1ac3e93c5b8685"
+content-hash = "f0de58e4e714b1fc5cf81f6cf14447606e7175e47838cd64fb0a47c7f747ea69"
