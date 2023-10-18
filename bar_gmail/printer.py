@@ -39,9 +39,10 @@ class PolybarPrinter(Printer):
         text = str(count) if count > 0 else ''
         if inaccurate:
             text = f'~{text}'
-        text = f'{self.badge} {text}'.strip()
         if count > 0 and self.color:
-            text = f'%{{F{self.color}}}{text}%{{F-}}'
+            text = f'%{{F{self.color}}}{self.badge}%{{F-}} {text}'.strip()
+        else:
+            text = f'{self.badge} {text}'.strip()
         self._print(text)
 
     def error(self, message):
