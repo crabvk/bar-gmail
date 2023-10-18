@@ -27,6 +27,8 @@ def cli():
                         help='The duration, in milliseconds, for the notification to appear on screen.')
     parser.add_argument('-dn', '--no-notify', action='store_true',
                         help='Disable new email notifications.')
+    parser.add_argument('-cr', '--credentials', default='credentials.json',
+                        help="Path to the credentials file, defaults to 'credentials.json'.")
     args = parser.parse_args()
 
     if args.color is not None and args.format != 'polybar':
@@ -35,7 +37,7 @@ def cli():
     BASE_DIR = Path(__file__).resolve().parent
     CLIENT_SECRETS_PATH = Path(BASE_DIR, 'client_secrets.json')
     CACHE_DIR = Path(Path.home(), '.cache/bar-gmail')
-    CREDENTIALS_PATH = Path(CACHE_DIR, 'credentials.json')
+    CREDENTIALS_PATH = Path(CACHE_DIR, args.credentials)
     SESSION_PATH = Path(CACHE_DIR, 'session.json')
 
     if not CACHE_DIR.is_dir():
