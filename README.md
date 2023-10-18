@@ -106,3 +106,5 @@ ls /usr/share/sounds/freedesktop/stereo/ | cut -d. -f1
 ```
 
 for example `bar-gmail --sound message-new-instant`.
+
+If you have several mails you can specify the `credentials.json` file with the `--credentials <path>` flag.
