@@ -61,7 +61,7 @@ class Gmail():
                                                     historyTypes=['messageAdded']).execute()
         for record in history.get('history', []):
             for message in record.get('messagesAdded', []):
-                if 'UNREAD' not in message['message']['labelIds']:
+                if 'UNREAD' not in message['message'].get('labelIds', []):
                     continue
                 message_id = message['message']['id']
                 try:

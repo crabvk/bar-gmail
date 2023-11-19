@@ -7,10 +7,10 @@ from subprocess import Popen
 from gi.repository import GLib
 from dasbus.connection import SessionMessageBus
 from dasbus.error import DBusError
-from bar_gmail.gmail import Gmail
-from bar_gmail.printer import WaybarPrinter, PolybarPrinter
 from google.auth.exceptions import TransportError
 from googleapiclient.errors import HttpError
+from bar_gmail.gmail import Gmail
+from bar_gmail.printer import WaybarPrinter, PolybarPrinter
 
 APP_NAME = 'Bar Gmail'
 NOTIFICATION_CATEGORY = 'email.arrived'
@@ -26,18 +26,16 @@ class UrgencyLevel(Enum):
 
 class Application:
     def __init__(self, session_path: Path, gmail: Gmail, printer: WaybarPrinter | PolybarPrinter,
-                 badge: str, color: str | None, label: str, sound_id: str,
-                 urgency_level: UrgencyLevel, expire_timeout: int, is_notify: bool):
+                 label: str, sound_id: str, urgency_level: UrgencyLevel, expire_timeout: int,
+                 is_notify: bool):
         self.session_path = session_path
         self.gmail = gmail
         self.printer = printer
-        self.badge = badge
         self.label = label
         self.sound_id = sound_id
         self.urgency_level = urgency_level
         self.expire_timeout = expire_timeout
         self.is_notify = is_notify
-        self.color = color
 
     @staticmethod
     def _is_innacurate(since: float) -> bool:
@@ -89,7 +87,7 @@ class Application:
 
         try:
             unread = self.gmail.get_unread_messages_count(self.label)
-            if unread != session['unread'] or inaccurate == True:
+            if unread != session['unread'] or inaccurate is True:
                 self.printer.print(unread)
             history_id = session['history_id'] or self.gmail.get_latest_history_id()
             session = {
@@ -105,7 +103,8 @@ class Application:
                 if any(history['messages']):
                     if self.sound_id:
                         self._play_sound()
-                    self._send_notifications(history['messages'])
+                    if self.is_notify:
+                        self._send_notifications(history['messages'])
                 session['history_id'] = history['history_id']
                 with open(self.session_path, 'w') as f:
                     json.dump(session, f)

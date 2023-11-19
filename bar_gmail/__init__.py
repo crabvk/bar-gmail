@@ -34,23 +34,23 @@ def cli():
     if args.color is not None and args.format != 'polybar':
         parser.error('`--color COLOR` can be used only with `--format polybar`.')
 
-    BASE_DIR = Path(__file__).resolve().parent
-    CLIENT_SECRETS_PATH = Path(BASE_DIR, 'client_secrets.json')
-    CACHE_DIR = Path(Path.home(), '.cache/bar-gmail')
-    CREDENTIALS_PATH = Path(CACHE_DIR, args.credentials)
-    SESSION_PATH = Path(CACHE_DIR, 'session.json')
+    base_dir = Path(__file__).resolve().parent
+    client_secrets_path = Path(base_dir, 'client_secrets.json')
+    cache_dir = Path(Path.home(), '.cache/bar-gmail')
+    credentials_path = Path(cache_dir, args.credentials)
+    session_path = Path(cache_dir, 'session.json')
 
-    if not CACHE_DIR.is_dir():
-        CACHE_DIR.mkdir(exist_ok=True)
+    if not cache_dir.is_dir():
+        cache_dir.mkdir(exist_ok=True)
 
-    gmail = Gmail(CLIENT_SECRETS_PATH, CREDENTIALS_PATH)
+    gmail = Gmail(client_secrets_path, credentials_path)
 
     if args.subcommand == 'auth':
         if gmail.authenticate():
             print('Authenticated successfully.')
         exit()
 
-    if not CREDENTIALS_PATH.is_file():
+    if not credentials_path.is_file():
         print('Credentials not found. Run `bar-gmail auth` for authentication.', file=sys.stderr)
         exit(1)
 
@@ -64,9 +64,7 @@ def cli():
     elif args.format == 'polybar':
         printer = PolybarPrinter(badge=args.badge, color=args.color)
 
-    app = Application(SESSION_PATH, gmail, printer,
-                      badge=args.badge,
-                      color=args.color,
+    app = Application(session_path, gmail, printer,
                       label=args.label,
                       sound_id=args.sound,
                       urgency_level=UrgencyLevel[args.urgency.upper()],
