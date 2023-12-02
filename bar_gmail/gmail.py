@@ -9,9 +9,10 @@ SCOPE = 'https://www.googleapis.com/auth/gmail.metadata'
 
 
 class Gmail():
-    def __init__(self, client_secrets_path: Path, credentials_path: Path):
+    def __init__(self, client_secrets_path: Path, credentials_path: Path, include_spam: bool):
         self.client_secrets_path = client_secrets_path
         self.credentials_path = credentials_path
+        self.include_spam = include_spam
         self._credentials = None
         self._gmail = None
 
@@ -35,6 +36,15 @@ class Gmail():
             if name in ['from', 'subject']:
                 result[name] = header['value']
         return result
+
+    def _check_label_ids(self, label_ids: list[str]) -> bool:
+        if 'UNREAD' in label_ids:
+            if self.include_spam:
+                return True
+            else:
+                return 'SPAM' not in label_ids
+        else:
+            return False
 
     def authenticate(self) -> bool:
         flow = InstalledAppFlow.from_client_secrets_file(self.client_secrets_path, scopes=SCOPE)
@@ -61,7 +71,8 @@ class Gmail():
                                                     historyTypes=['messageAdded']).execute()
         for record in history.get('history', []):
             for message in record.get('messagesAdded', []):
-                if 'UNREAD' not in message['message'].get('labelIds', []):
+                label_ids = message['message'].get('labelIds', [])
+                if not self._check_label_ids(label_ids):
                     continue
                 message_id = message['message']['id']
                 try:

@@ -27,6 +27,8 @@ def cli():
                         help='The duration, in milliseconds, for the notification to appear on screen.')
     parser.add_argument('-dn', '--no-notify', action='store_true',
                         help='Disable new email notifications.')
+    parser.add_argument('-sm', '--spam', action='store_true',
+                        help='Enable new spam email notifications.')
     parser.add_argument('-cr', '--credentials', default='credentials.json',
                         help="Path to the credentials file, defaults to 'credentials.json'.")
     args = parser.parse_args()
@@ -43,7 +45,7 @@ def cli():
     if not cache_dir.is_dir():
         cache_dir.mkdir(exist_ok=True)
 
-    gmail = Gmail(client_secrets_path, credentials_path)
+    gmail = Gmail(client_secrets_path, credentials_path, include_spam=args.spam)
 
     if args.subcommand == 'auth':
         if gmail.authenticate():
