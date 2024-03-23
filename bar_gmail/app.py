@@ -27,7 +27,7 @@ class UrgencyLevel(Enum):
 class Application:
     def __init__(self, session_path: Path, gmail: Gmail, printer: WaybarPrinter | PolybarPrinter,
                  label: str, sound_id: str, urgency_level: UrgencyLevel, expire_timeout: int,
-                 is_notify: bool):
+                 is_notify: bool, include_spam: bool):
         self.session_path = session_path
         self.gmail = gmail
         self.printer = printer
@@ -36,6 +36,7 @@ class Application:
         self.urgency_level = urgency_level
         self.expire_timeout = expire_timeout
         self.is_notify = is_notify
+        self.include_spam = include_spam
 
     @staticmethod
     def _is_innacurate(since: float) -> bool:
@@ -99,7 +100,7 @@ class Application:
                 json.dump(session, f)
 
             if session['history_id']:
-                history = self.gmail.get_history_since(session['history_id'])
+                history = self.gmail.get_history_since(session['history_id'], self.include_spam)
                 if any(history['messages']):
                     if self.sound_id:
                         self._play_sound()

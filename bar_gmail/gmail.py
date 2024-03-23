@@ -9,10 +9,9 @@ SCOPE = 'https://www.googleapis.com/auth/gmail.metadata'
 
 
 class Gmail():
-    def __init__(self, client_secrets_path: Path, credentials_path: Path, include_spam: bool):
+    def __init__(self, client_secrets_path: Path, credentials_path: Path):
         self.client_secrets_path = client_secrets_path
         self.credentials_path = credentials_path
-        self.include_spam = include_spam
         self._credentials = None
         self._gmail = None
 
@@ -37,9 +36,9 @@ class Gmail():
                 result[name] = header['value']
         return result
 
-    def _check_label_ids(self, label_ids: list[str]) -> bool:
+    def _check_label_ids(self, label_ids: list[str], include_spam: bool) -> bool:
         if 'UNREAD' in label_ids:
-            if self.include_spam:
+            if include_spam:
                 return True
             else:
                 return 'SPAM' not in label_ids
@@ -65,14 +64,14 @@ class Gmail():
             message = self.gmail.users().messages().get(userId='me', id=message_id, format='metadata').execute()
             return message['historyId']
 
-    def get_history_since(self, history_id: str) -> dict:
+    def get_history_since(self, history_id: str, include_spam: bool) -> dict:
         messages = []
         history = self.gmail.users().history().list(userId='me', startHistoryId=history_id,
                                                     historyTypes=['messageAdded']).execute()
         for record in history.get('history', []):
             for message in record.get('messagesAdded', []):
                 label_ids = message['message'].get('labelIds', [])
-                if not self._check_label_ids(label_ids):
+                if not self._check_label_ids(label_ids, include_spam):
                     continue
                 message_id = message['message']['id']
                 try:

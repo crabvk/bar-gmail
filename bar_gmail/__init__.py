@@ -45,7 +45,7 @@ def cli():
     if not cache_dir.is_dir():
         cache_dir.mkdir(exist_ok=True)
 
-    gmail = Gmail(client_secrets_path, credentials_path, include_spam=args.spam)
+    gmail = Gmail(client_secrets_path, credentials_path)
 
     if args.subcommand == 'auth':
         if gmail.authenticate():
@@ -71,7 +71,8 @@ def cli():
                       sound_id=args.sound,
                       urgency_level=UrgencyLevel[args.urgency.upper()],
                       expire_timeout=args.expire_timeout,
-                      is_notify=not args.no_notify)
+                      is_notify=not args.no_notify,
+                      include_spam=args.spam)
     app.run()
 
 
