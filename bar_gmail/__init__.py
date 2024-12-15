@@ -7,30 +7,29 @@ from bar_gmail.printer import WaybarPrinter, PolybarPrinter
 
 
 def cli():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     subparsers = parser.add_subparsers(dest='subcommand')
     subparsers.add_parser('auth', help='Authentication.')
     subparsers.add_parser('labels', help='List mailbox labels.')
-    parser.add_argument('-f', '--format', choices=['waybar', 'polybar'], default='waybar',
-                        help='Print output in specified format [default: waybar].')
-    parser.add_argument('-b', '--badge', default='',
-                        help='Badge to display in the bar [default: ].')
-    parser.add_argument('-c', '--color',
-                        help='Text foreground color (only for Polybar).')
+    parser.add_argument('-f', '--format', choices=['waybar', 'polybar'],
+                        default='waybar', help='Print output in specified format')
+    parser.add_argument('-b', '--badge', default='', help='Badge to display in the bar')
+    parser.add_argument('-c', '--color', help='Text foreground color (only for Polybar)')
     parser.add_argument('-l', '--label', default='INBOX',
-                        help="User's mailbox label for unread messages count [default: INBOX].")
+                        help="User's mailbox label for unread messages count")
     parser.add_argument('-s', '--sound',
-                        help='Notification sound (event sound ID from canberra-gtk-play).')
+                        help='Notification sound (event sound ID from canberra-gtk-play)')
     parser.add_argument('-u', '--urgency', choices=['low', 'normal', 'critical'],
-                        default='normal', help='Notification urgency level [default: normal].')
+                        default='normal', help='Notification urgency level')
     parser.add_argument('-t', '--expire-timeout', type=int, default=0,
-                        help='The duration, in milliseconds, for the notification to appear on screen.')
+                        help='The duration, in milliseconds, for the notification to appear on screen')
     parser.add_argument('-dn', '--no-notify', action='store_true',
-                        help='Disable new email notifications.')
+                        help='Disable new email notifications')
     parser.add_argument('-sm', '--spam', action='store_true',
-                        help='Enable new spam email notifications.')
+                        help='Enable new spam email notifications')
     parser.add_argument('-cr', '--credentials', default='credentials.json',
-                        help="Path to the credentials file, defaults to 'credentials.json'.")
+                        help="Path to the credentials file.")
+    parser.add_argument('-cd', '--cache-dir', default='~/.cache/bar-gmail', help="Cache directory")
     args = parser.parse_args()
 
     if args.color is not None and args.format != 'polybar':
@@ -38,7 +37,7 @@ def cli():
 
     base_dir = Path(__file__).resolve().parent
     client_secrets_path = Path(base_dir, 'client_secrets.json')
-    cache_dir = Path(Path.home(), '.cache/bar-gmail')
+    cache_dir = Path(args.cache_dir).expanduser()
     credentials_path = Path(cache_dir, args.credentials)
     session_path = Path(cache_dir, 'session.json')
 
@@ -63,7 +62,7 @@ def cli():
 
     if args.format == 'waybar':
         printer = WaybarPrinter(badge=args.badge)
-    elif args.format == 'polybar':
+    else:
         printer = PolybarPrinter(badge=args.badge, color=args.color)
 
     app = Application(session_path, gmail, printer,

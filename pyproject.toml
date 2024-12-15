@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bar-gmail"
-version = "1.0.5"
+version = "1.0.6"
 description = "Get notifications and unread messages count from Gmail (Waybar/Polybar module)"
 license = "MIT"
 readme = "README.md"
@@ -19,14 +19,14 @@ bar-gmail = "bar_gmail:cli"
 
 [tool.poetry.dependencies]
 python = "^3.10.7"
-google-api-python-client = "^2.100.0"
-google-auth-httplib2 = "^0.1.1"
+google-api-python-client = "^2.155.0"
+google-auth-httplib2 = "^0.2.0"
 google-auth-oauthlib = "^1.1.0"
 dasbus = "^1.7"
 pygobject = "^3.46.0"
 
 [tool.poetry.group.dev.dependencies]
-pip = "^23.2.1"
+pip = "^24.3.1"
 autopep8 = "^2.0.4"
 
 [build-system]
