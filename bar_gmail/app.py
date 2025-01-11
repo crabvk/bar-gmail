@@ -80,7 +80,7 @@ class Application:
     def run(self):
         session = {'history_id': None, 'unread': None}
         inaccurate = False
-        if self.session_path.is_file():
+        if self.session_path.is_file() and self.session_path.stat().st_size > 0:
             with open(self.session_path, 'r') as f:
                 session = json.loads(f.read())
                 inaccurate = self._is_innacurate(session['time'])
